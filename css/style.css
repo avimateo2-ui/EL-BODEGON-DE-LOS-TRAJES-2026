@@ -434,11 +434,10 @@ section {
   color: var(--season-dark-soft);
 }
 
-/* CONTACT SECTION - STRIKING RED THEME */
+/* CONTACT SECTION - TEMA SEGÚN MES ACTIVO */
 #contacto {
-  color: #ff3333;
-  background: rgba(139, 0, 0, 0.05);
-  /* Subtle deep red background */
+  color: var(--season-accent);
+  background: var(--season-accent-soft);
 }
 
 #contacto span,
@@ -447,16 +446,14 @@ section {
 #contacto label,
 #contacto h2,
 #contacto h3 {
-  color: #ff1111 !important;
-  /* brighter red */
-  text-shadow: 0 0 12px rgba(255, 0, 0, 0.25);
+  color: var(--season-accent);
+  text-shadow: 0 0 12px var(--season-glow);
   font-weight: 600;
-  /* bold for clarity */
 }
 
 /* Form refinement for contact section */
 #contacto .contact-card h3 {
-  color: var(--halloween-vivid);
+  color: var(--season-accent);
 }
 
 #contacto input,
@@ -465,10 +462,10 @@ section {
   padding: 1.8rem;
   /* Increased padding for a larger feel */
   font-size: 1.1rem;
-  border: 1px solid rgba(255, 0, 0, 0.1);
-  border-bottom: 2px solid #ff3333;
-  color: #ff1111;
-  background: rgba(255, 0, 0, 0.02);
+  border: 1px solid var(--season-accent-soft);
+  border-bottom: 2px solid var(--season-accent);
+  color: var(--season-accent);
+  background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   margin-bottom: 2rem;
   transition: var(--transition-premium);
@@ -477,7 +474,8 @@ section {
 
 #contacto input::placeholder,
 #contacto textarea::placeholder {
-  color: rgba(255, 51, 51, 0.3);
+  color: var(--season-accent);
+  opacity: 0.35;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.85rem;
@@ -485,9 +483,9 @@ section {
 
 #contacto input:focus,
 #contacto textarea:focus {
-  background: rgba(255, 0, 0, 0.08);
-  border-color: #ff0000;
-  box-shadow: 0 0 25px rgba(255, 0, 0, 0.15);
+  background: var(--season-accent-soft);
+  border-color: var(--season-accent);
+  box-shadow: 0 0 25px var(--season-glow);
   outline: none;
   transform: translateY(-2px);
 }
@@ -500,10 +498,10 @@ section {
 }
 
 .contact-form-container {
-  background: rgba(255, 0, 0, 0.02);
+  background: var(--season-accent-soft);
   padding: 4rem;
   border-radius: 20px;
-  border: 1px solid rgba(255, 0, 0, 0.1);
+  border: 1px solid var(--season-accent-soft);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
@@ -512,8 +510,8 @@ section {
 .submit-btn {
   width: 100%;
   padding: 1.8rem;
-  background: linear-gradient(135deg, #8b0000 0%, #ff1111 100%);
-  color: white;
+  background: var(--season-accent);
+  color: #0a0a0a;
   border: none;
   border-radius: 12px;
   font-size: 1.15rem;
@@ -522,12 +520,12 @@ section {
   letter-spacing: 5px;
   cursor: pointer;
   transition: var(--transition-premium);
-  box-shadow: 0 15px 30px rgba(139, 0, 0, 0.3);
+  box-shadow: 0 15px 30px var(--season-glow);
 }
 
 .submit-btn:hover {
-  background: linear-gradient(135deg, #ff1111 0%, #ff4444 100%);
-  box-shadow: 0 20px 40px rgba(255, 0, 0, 0.4);
+  filter: brightness(1.15);
+  box-shadow: 0 20px 40px var(--season-glow);
   transform: translateY(-5px) scale(1.02);
 }
 
@@ -656,10 +654,10 @@ footer p {
   }
 }
 
-/* FINAL MELO RED CONTACT THEME */
+/* CONTACTO: COLOR DEL MES ACTIVO */
 #contacto {
   background-color: #0a0000 !important;
-  color: #ff0000 !important;
+  color: var(--season-accent) !important;
 }
 
 #contacto .section-head h2,
@@ -671,26 +669,105 @@ footer p {
 #contacto input,
 #contacto textarea,
 #contacto label {
-  color: #ff3333 !important;
+  color: var(--season-accent) !important;
   font-weight: 700;
 }
 
 #contacto input,
 #contacto textarea {
-  border-bottom: 2px solid #ff3333 !important;
-  background: rgba(40, 0, 0, 0.2) !important;
+  border-bottom: 2px solid var(--season-accent) !important;
+  background: var(--season-accent-soft) !important;
 }
 
 #contacto .submit-btn {
-  background: #cc0000 !important;
-  color: white !important;
+  background: var(--season-accent) !important;
+  color: #0a0a0a !important;
   border: none !important;
-  box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+  box-shadow: 0 0 20px var(--season-glow);
 }
 
 #contacto .submit-btn:hover {
-  background: #ff0000 !important;
-  box-shadow: 0 0 30px rgba(255, 0, 0, 0.6);
+  filter: brightness(1.15);
+  box-shadow: 0 0 30px var(--season-glow);
+}
+
+/* CONTACTO: COLOR DEL MES ACTIVO */
+#temporadas ~ #contacto {
+  --season-accent: #d4af37;
+  --season-glow: rgba(212, 175, 55, 0.35);
+  --season-accent-soft: rgba(212, 175, 55, 0.08);
+}
+
+#temporadas[data-season="enero"] ~ #contacto {
+  --season-accent: #b8892d;
+  --season-glow: rgba(184, 137, 45, 0.35);
+  --season-accent-soft: rgba(184, 137, 45, 0.08);
+}
+
+#temporadas[data-season="febrero"] ~ #contacto {
+  --season-accent: #cf7f8a;
+  --season-glow: rgba(207, 127, 138, 0.35);
+  --season-accent-soft: rgba(207, 127, 138, 0.08);
+}
+
+#temporadas[data-season="marzo"] ~ #contacto {
+  --season-accent: #c9a227;
+  --season-glow: rgba(201, 162, 39, 0.35);
+  --season-accent-soft: rgba(201, 162, 39, 0.08);
+}
+
+#temporadas[data-season="abril"] ~ #contacto {
+  --season-accent: #5aa75a;
+  --season-glow: rgba(90, 167, 90, 0.35);
+  --season-accent-soft: rgba(90, 167, 90, 0.08);
+}
+
+#temporadas[data-season="mayo"] ~ #contacto {
+  --season-accent: #8f7bc9;
+  --season-glow: rgba(143, 123, 201, 0.35);
+  --season-accent-soft: rgba(143, 123, 201, 0.08);
+}
+
+#temporadas[data-season="junio"] ~ #contacto {
+  --season-accent: #d4a72e;
+  --season-glow: rgba(212, 167, 46, 0.35);
+  --season-accent-soft: rgba(212, 167, 46, 0.08);
+}
+
+#temporadas[data-season="julio"] ~ #contacto {
+  --season-accent: #3fa49b;
+  --season-glow: rgba(63, 164, 155, 0.35);
+  --season-accent-soft: rgba(63, 164, 155, 0.08);
+}
+
+#temporadas[data-season="agosto"] ~ #contacto {
+  --season-accent: #cf8b4a;
+  --season-glow: rgba(207, 139, 74, 0.35);
+  --season-accent-soft: rgba(207, 139, 74, 0.08);
+}
+
+#temporadas[data-season="septiembre"] ~ #contacto {
+  --season-accent: #64748b;
+  --season-glow: rgba(100, 116, 139, 0.35);
+  --season-accent-soft: rgba(100, 116, 139, 0.08);
+}
+
+#temporadas[data-season="octubre"] ~ #contacto {
+  --season-accent: #ff8c00;
+  --season-glow: rgba(255, 140, 0, 0.35);
+  --season-accent-soft: rgba(255, 140, 0, 0.08);
+}
+
+#temporadas[data-season="noviembre"] ~ #contacto {
+  --season-accent: #b0813f;
+  --season-glow: rgba(176, 129, 63, 0.35);
+  --season-accent-soft: rgba(176, 129, 63, 0.08);
+}
+
+#temporadas[data-season="diciembre"] ~ #contacto {
+  --season-accent: #d62822;
+  --season-glow: rgba(214, 40, 34, 0.35);
+  --season-accent-soft: rgba(214, 40, 34, 0.08);
 }
 
 /* ============ TEMPORADAS (CATÁLOGO POR TEMPORADA) ============ */
