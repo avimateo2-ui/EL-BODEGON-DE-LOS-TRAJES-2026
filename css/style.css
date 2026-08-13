@@ -291,6 +291,10 @@ section {
   filter: contrast(1.1) brightness(0.9);
 }
 
+.img-ghost img[src*="er.jpg"] {
+  filter: contrast(1.25) brightness(1.3);
+}
+
 .img-ghost-centered {
   display: flex;
   align-items: center;
@@ -699,9 +703,9 @@ footer p {
 }
 
 #temporadas[data-season="enero"] ~ #contacto {
-  --season-accent: #b8892d;
-  --season-glow: rgba(184, 137, 45, 0.35);
-  --season-accent-soft: rgba(184, 137, 45, 0.08);
+  --season-accent: #9fc6e2;
+  --season-glow: rgba(159, 198, 226, 0.4);
+  --season-accent-soft: rgba(159, 198, 226, 0.1);
 }
 
 #temporadas[data-season="febrero"] ~ #contacto {
