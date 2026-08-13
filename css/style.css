@@ -132,7 +132,7 @@ nav a:hover::after {
   align-items: center;
   justify-content: center;
   text-align: center;
-  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(5, 5, 5, 1)), url('horror_bg.png');
+  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(5, 5, 5, 1)), url('../assets/img/horror_bg.png');
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -868,7 +868,7 @@ footer p {
   padding: 6rem 2rem;
   border: 1px solid rgba(255, 140, 0, 0.4);
   border-radius: 16px;
-  background: linear-gradient(160deg, rgba(15, 8, 0, 0.92), rgba(5, 5, 5, 0.96)), url('horror_bg.png');
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.92), rgba(5, 5, 5, 0.96)), url('../assets/img/horror_bg.png');
   background-size: cover;
   background-position: center;
   position: relative;
@@ -2748,4 +2748,180 @@ html {
   0% { transform: scale(0.9); opacity: 1; }
   70% { transform: scale(1.25); opacity: 0; }
   100% { transform: scale(1.25); opacity: 0; }
+}
+
+/* ================= AJUSTES RESPONSIVE (PC / TABLET / CELULAR) ================= */
+
+/* --- Textos fluidos (se adaptan al ancho sin cortes) --- */
+.hero-box h2 { font-size: clamp(2rem, 6vw, 5.5rem); }
+.hero-box p { font-size: clamp(0.8rem, 1.6vw, 1.2rem); }
+.section-head h2,
+#temporadas[data-season] .section-head h2 {
+  font-size: clamp(1.9rem, 4.5vw, 3.8rem);
+}
+.section-head span { letter-spacing: clamp(3px, 1.2vw, 10px); }
+.season-title { font-size: clamp(1.5rem, 3.4vw, 2.6rem); }
+.season-subtitle { font-size: clamp(0.95rem, 1.3vw, 1.05rem); }
+.season-catalog h4 { font-size: clamp(1.2rem, 2.2vw, 1.6rem); }
+
+/* --- Ajustes generales de caja --- */
+section {
+  padding: 8rem 7%;
+  overflow-x: clip;
+}
+
+/* ===== TABLET (<= 1024px) ===== */
+@media (max-width: 1024px) {
+  header { padding: 1rem 4%; }
+  section { padding: 5rem 5%; }
+  #temporadas { padding: 5rem 5%; }
+  .section-head { margin-bottom: 4rem; }
+  .img-ghost { height: 340px; }
+  .card-body-haunted { padding: 2rem 1.6rem; }
+  .season-catalog { padding: 2rem; }
+  .season-tab { padding: 1.1rem 1.7rem; font-size: 1rem; }
+  footer { padding: 4rem 5%; }
+  .flex-contact { gap: 3rem; }
+  .contact-form-container { padding: 2.5rem; }
+}
+
+/* ===== CELULAR GRANDE / TABLET PEQUEÑA (<= 768px) ===== */
+@media (max-width: 768px) {
+  .hero-horror { background-attachment: scroll; }
+  .hero-box h2 { font-size: clamp(1.7rem, 6.5vw, 2.6rem); line-height: 1.25; }
+  .hero-box p { letter-spacing: 3px; }
+  .btn-haunted { padding: 1rem 2.4rem; font-size: 0.78rem; letter-spacing: 3px; }
+
+  section { padding: 4rem 4%; }
+  #temporadas { padding: 4rem 4%; }
+  footer { padding: 3.5rem 4%; }
+
+  .logo-container { gap: 0.7rem; }
+  .logo-container img { height: 38px; }
+  header h1 { font-size: 1.05rem; letter-spacing: 1px; }
+  header.scrolled { padding: 0.8rem 4%; }
+
+  .grid-haunted {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+  .img-ghost { height: 260px; }
+  .season-catalog .grid-haunted { gap: 1.6rem; }
+
+  .season-panel.is-active { gap: 2.5rem; }
+  .season-panel.is-active.season-panel-stack { gap: 2.5rem; }
+  .season-sub-sections { gap: 1.8rem; }
+  .season-hero { padding: 2rem; }
+  .season-title { font-size: 1.55rem; letter-spacing: 1px; }
+  .season-subtitle { line-height: 1.8; }
+  .season-quick-nav { margin: -1rem 0 2.5rem; }
+
+  .season-tabs {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    padding-bottom: 0.6rem;
+    margin-bottom: 3rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .season-tabs::-webkit-scrollbar { display: none; }
+  .season-tab {
+    flex: 0 0 auto;
+    padding: 0.85rem 1.2rem;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+  }
+  .season-tab .tab-label { font-size: 0.55rem; letter-spacing: 1px; }
+
+  .season-item { grid-template-columns: 96px 1fr; gap: 1.1rem; padding: 0.7rem; }
+  .season-item img { width: 96px; height: 96px; }
+  .season-item-body h4 { font-size: 0.95rem; }
+  .season-item-body p { font-size: 0.85rem; }
+
+  .season-subsection { gap: 1.6rem; padding: 1.6rem; }
+  .subsection-img img { height: 200px; }
+
+  .contact-form-container { padding: 2rem; }
+  #contacto input, #contacto textarea { padding: 1.3rem; font-size: 1rem; }
+  #contacto .submit-btn { padding: 1.3rem; font-size: 1rem; letter-spacing: 3px; }
+
+  .catalog-note { padding: 1.4rem 1.4rem; font-size: 0.98rem; }
+  .season-blank { padding: 4rem 1.5rem; }
+  .season-blank-title { letter-spacing: 6px; }
+}
+
+/* ===== CELULAR (<= 640px) ===== */
+@media (max-width: 640px) {
+  .hero-horror { height: 100svh; min-height: 520px; }
+  .hero-box h2 { margin-bottom: 1.4rem; }
+  .hero-box p { letter-spacing: 2px; line-height: 1.7; }
+
+  section { padding: 3.5rem 4%; }
+  #temporadas { padding: 3.5rem 4%; }
+  .section-head { margin-bottom: 3rem; }
+  .section-head h2,
+  #temporadas[data-season] .section-head h2 { letter-spacing: 1px; }
+
+  .grid-haunted { grid-template-columns: 1fr; }
+  .img-ghost { height: 250px; }
+  .card-body-haunted { padding: 1.8rem 1.3rem; }
+  .card-body-haunted h3 { font-size: 1.5rem; }
+
+  .season-catalog { padding: 1.4rem; border-radius: 12px; }
+  .season-hero { padding: 1.7rem; }
+  .season-title { font-size: 1.35rem; }
+  .season-milestone { font-size: 0.62rem; letter-spacing: 2px; padding: 0.45rem 1rem; }
+  .season-subtitle { font-size: 0.95rem; margin-bottom: 1.8rem; }
+
+  .season-cta {
+    width: 100%;
+    text-align: center;
+    padding: 1.05rem 1.4rem;
+    letter-spacing: 2px;
+    font-size: 0.75rem;
+  }
+  .season-item { grid-template-columns: 82px 1fr; gap: 0.9rem; padding: 0.55rem; }
+  .season-item img { width: 82px; height: 82px; }
+  .season-item-body p { font-size: 0.82rem; }
+  .expand-icon { font-size: 0.85rem; }
+
+  .season-subsection { padding: 1.3rem; gap: 1.3rem; }
+  .subsection-img img { height: 185px; }
+  .season-subsection h4 { font-size: 1.25rem; }
+  .season-subsection p { font-size: 0.92rem; line-height: 1.75; }
+
+  .season-quick-nav a { padding: 0.6rem 1.2rem; font-size: 0.68rem; letter-spacing: 2px; }
+
+  .contact-form-container { padding: 1.5rem; border-radius: 14px; }
+  #contacto input, #contacto textarea { padding: 1.1rem; margin-bottom: 1.4rem; font-size: 0.98rem; }
+  #contacto .submit-btn { padding: 1.1rem; font-size: 0.95rem; }
+
+  footer { padding: 3rem 4%; }
+  footer p { font-size: 0.9rem; line-height: 1.8; }
+
+  .lightbox-close { top: 1rem; right: 1rem; width: 2.8rem; height: 2.8rem; font-size: 1.4rem; }
+  .lightbox img { max-width: 95vw; }
+
+  .whatsapp-float { width: 3rem; height: 3rem; left: 1rem; bottom: 1rem; }
+  .admin-fab { right: 1rem; bottom: 1rem; }
+  .admin-logout-fab { right: 4.3rem; bottom: 1rem; }
+  .admin-modal-actions { flex-wrap: wrap; }
+  .admin-photorow { flex-wrap: wrap; }
+}
+
+/* ===== CELULAR MUY PEQUEÑO (<= 420px) ===== */
+@media (max-width: 420px) {
+  header { padding: 0.7rem 3%; }
+  header h1 { font-size: 0.9rem; }
+  .logo-container img { height: 32px; }
+  .hero-box h2 { font-size: 1.6rem; }
+  .hero-box p { letter-spacing: 1.5px; font-size: 0.72rem; }
+  .btn-haunted { padding: 0.9rem 1.8rem; font-size: 0.7rem; letter-spacing: 2px; }
+  .season-cta { font-size: 0.7rem; letter-spacing: 1.5px; }
+  .season-quick-nav a { font-size: 0.62rem; padding: 0.55rem 0.95rem; }
+  .season-item { grid-template-columns: 72px 1fr; }
+  .season-item img { width: 72px; height: 72px; }
+  .section-head span { letter-spacing: 2px; font-size: 0.75rem; }
+  .season-tab { padding: 0.75rem 0.95rem; font-size: 0.78rem; }
+  .season-tab-exclusive::before { right: -38px; }
 }
