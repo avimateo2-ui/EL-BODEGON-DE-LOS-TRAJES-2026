@@ -712,17 +712,17 @@ footer p {
   --season-glow: rgba(184, 137, 45, 0.18);
   --season-accent-soft: rgba(184, 137, 45, 0.09);
   background:
-    radial-gradient(circle at 85% 8%, rgba(212, 175, 55, 0.14), transparent 45%),
+    radial-gradient(circle at 85% 8%, rgba(184, 137, 45, 0.14), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, #9fc6e2 0%, #c4e0f2 50%, #a3c9e5 100%);
-  border-top: 1px solid #d4af37;
-  border-bottom: 1px solid #d4af37;
+  border-top: 1px solid #b8892d;
+  border-bottom: 1px solid #b8892d;
 }
 
 #temporadas[data-season="enero"] .section-head h2 {
   color: #b8892d;
   font-size: 4.4rem;
-  text-shadow: 0 0 25px rgba(212, 175, 55, 0.4), 0 2px 3px rgba(29, 58, 92, 0.15);
+  text-shadow: 0 0 25px rgba(184, 137, 45, 0.4), 0 2px 3px rgba(29, 58, 92, 0.15);
 }
 
 @media (max-width: 640px) {
@@ -778,8 +778,8 @@ footer p {
 }
 
 .season-catalog:hover {
-  border-color: rgba(255, 140, 0, 0.7);
-  box-shadow: 0 0 35px rgba(255, 140, 0, 0.12);
+  border-color: var(--season-accent);
+  box-shadow: 0 0 35px var(--season-glow);
 }
 
 .season-catalog h4 {
@@ -1014,7 +1014,7 @@ footer p {
 /* PESTAÑAS · COLOR DISTINTO POR TEMPORADA */#temporadas .season-tab[data-month="enero"]:not(.is-active) {
   background: linear-gradient(135deg, #9fc6e2, #cfe5f3);
   color: #1d3a5c;
-  border-color: #d4af37;
+  border-color: #b8892d;
   font-weight: 700;
 }
 
@@ -1025,9 +1025,9 @@ footer p {
 #temporadas[data-season="enero"] .season-tab.is-active {
   background: linear-gradient(135deg, #8fbee0, #b9d8ee);
   color: #16324f;
-  border-color: #d4af37;
+  border-color: #b8892d;
   text-shadow: none;
-  box-shadow: 0 0 35px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 0 35px rgba(184, 137, 45, 0.4);
 }
 
 #temporadas[data-season="enero"] .season-tab.is-active .tab-label {
@@ -1150,7 +1150,7 @@ footer p {
 #temporadas[data-season="enero"] .season-item,
 #temporadas[data-season="enero"] .season-nav-card,
 #temporadas[data-season="enero"] .subsection-img {
-  border-color: #d4af37;
+  border-color: #b8892d;
 }
 
 #temporadas[data-season="enero"] .season-item,
@@ -1178,18 +1178,18 @@ footer p {
 
 #temporadas[data-season="enero"] .season-hero:hover {
   transform: translateY(-5px) scale(1.02);
-  border-color: #d4af37;
+  border-color: #b8892d;
   border-width: 2px;
-  box-shadow: 0 22px 50px rgba(29, 58, 92, 0.22), 0 0 45px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 22px 50px rgba(29, 58, 92, 0.22), 0 0 45px rgba(184, 137, 45, 0.4);
 }
 
 #temporadas[data-season="enero"] .season-milestone {
   font-size: 0.9rem;
   color: #8a6a20;
-  border-color: #d4af37;
+  border-color: #b8892d;
   border-width: 1.5px;
   letter-spacing: 5px;
-  box-shadow: 0 0 18px rgba(212, 175, 55, 0.35);
+  box-shadow: 0 0 18px rgba(184, 137, 45, 0.35);
 }
 
 #temporadas[data-season="febrero"] {
@@ -1221,7 +1221,7 @@ footer p {
   --season-dark-soft: #8a7325;
   --season-strong: #a8841c;
   background:
-    radial-gradient(circle at 85% 8%, rgba(212, 175, 55, 0.16), transparent 45%),
+    radial-gradient(circle at 85% 8%, rgba(201, 162, 39, 0.16), transparent 45%),
     radial-gradient(circle at 12% 92%, rgba(255, 255, 255, 0.4), transparent 55%),
     linear-gradient(165deg, var(--season-bg1), var(--season-bg2), var(--season-bg3));
   border-top: 1px solid rgba(201, 162, 39, 0.5);
@@ -1873,7 +1873,7 @@ footer p {
 }
 
 #temporadas .section-head span {
-  color: #d4af37;
+  color: var(--season-accent);
   letter-spacing: 12px;
 }
 
@@ -1991,23 +1991,23 @@ a.season-item:hover {
 }
 
 .season-nav-card:hover .expand-icon {
-  background: #d4af37;
+  background: var(--season-accent);
   color: #0a0a0a;
   transform: translateX(4px);
-  box-shadow: 0 0 18px rgba(212, 175, 55, 0.5);
+  box-shadow: 0 0 18px var(--season-glow);
 }
 
 .expand-icon {
   width: 34px;
   height: 34px;
-  border: 1px solid #d4af37;
+  border: 1px solid var(--season-accent);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.05rem;
   line-height: 1;
-  color: #d4af37;
+  color: var(--season-accent);
   transition: var(--transition-premium);
   flex-shrink: 0;
 }
@@ -2025,7 +2025,7 @@ a.season-item:hover {
   gap: 2.5rem;
   align-items: center;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 60%);
-  border: 1px solid rgba(212, 175, 55, 0.35);
+  border: 1px solid var(--season-accent);
   border-radius: 16px;
   padding: 2rem;
   scroll-margin-top: 140px;
@@ -2033,14 +2033,14 @@ a.season-item:hover {
 }
 
 .season-subsection:hover {
-  border-color: #d4af37;
-  box-shadow: 0 0 40px rgba(212, 175, 55, 0.22), 0 15px 40px rgba(0, 0, 0, 0.7);
+  border-color: var(--season-accent);
+  box-shadow: 0 0 40px var(--season-glow), 0 15px 40px rgba(0, 0, 0, 0.7);
 }
 
 .subsection-img {
   overflow: hidden;
   border-radius: 12px;
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid var(--season-accent);
 }
 
 .subsection-img img {
@@ -2057,10 +2057,10 @@ a.season-item:hover {
 
 .season-subsection h4 {
   font-size: 1.6rem;
-  color: #d4af37;
+  color: var(--season-accent);
   letter-spacing: 3px;
   margin-bottom: 1rem;
-  text-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
+  text-shadow: 0 0 14px var(--season-glow);
 }
 
 .season-subsection p {
@@ -2092,9 +2092,9 @@ a.season-item:hover {
   position: absolute;
   left: 0;
   top: 0.15rem;
-  color: #d4af37;
+  color: var(--season-accent);
   font-size: 0.85rem;
-  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  text-shadow: 0 0 10px var(--season-glow);
 }
 
 .subsection-list li strong {
