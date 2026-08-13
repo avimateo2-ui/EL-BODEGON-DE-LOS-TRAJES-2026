@@ -914,10 +914,20 @@ footer p {
   padding: 6rem 2rem;
   border: 1px solid rgba(255, 140, 0, 0.4);
   border-radius: 16px;
-  background: linear-gradient(160deg, rgba(15, 8, 0, 0.92), rgba(5, 5, 5, 0.96)), url('../assets/img/horror_bg.png');
+  background: linear-gradient(160deg, rgba(15, 8, 0, 0.35), rgba(5, 5, 5, 0.72)), url('../assets/img/horror_bg.png');
   background-size: cover;
   background-position: center;
   position: relative;
+  isolation: isolate;
+}
+
+.halloween-landing::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(ellipse at center, rgba(10, 5, 0, 0.6) 0%, rgba(5, 5, 5, 0.1) 72%);
+  pointer-events: none;
 }
 
 .halloween-landing.is-visible {
@@ -948,6 +958,11 @@ footer p {
   letter-spacing: 6px;
   font-weight: 700;
   text-transform: uppercase;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
+}
+
+.halloween-landing .season-milestone {
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.95);
 }
 
 .halloween-content {
