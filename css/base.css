@@ -1,0 +1,46 @@
+:root {
+  --pure-black: #050505;
+  --soft-black: #0c0c0c;
+  --halloween-primary: #FF8C00;
+  --halloween-vivid: #FFA500;
+  --halloween-muted: #B8860B;
+  --ghostly-white: #F1F5F9;
+  --ashen-grey: #94A3B8;
+  /* Improved readability */
+  --blood-red: #DA0000;
+  --border-glow: rgba(255, 140, 0, 0.2);
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --transition-premium: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  --transition-haunted: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--pure-black);
+  color: var(--ashen-grey);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Cinzel Decorative', cursive;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--halloween-primary);
+  text-transform: uppercase;
+}
+

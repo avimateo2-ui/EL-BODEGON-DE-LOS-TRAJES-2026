@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://el-bodegon-de-los-trajes.vercel.app/sitemap.xml

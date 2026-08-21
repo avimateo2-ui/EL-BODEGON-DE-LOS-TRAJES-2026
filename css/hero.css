@@ -1,0 +1,123 @@
+/* HERO */
+.hero-horror {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(5, 5, 5, 1));
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-horror::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: url('../assets/img/horror_bg.png') center / cover no-repeat;
+  animation: heroKenBurns 20s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.hero-horror.has-cover-photo {
+  background-blend-mode: soft-light;
+}
+.hero-horror.has-cover-photo::before {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.35) 100%) !important;
+  animation: none;
+}
+.hero-horror.has-cover-photo::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.hero-horror > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes heroKenBurns {
+  0% {
+    transform: scale(1.02);
+  }
+
+  100% {
+    transform: scale(1.12);
+  }
+}
+
+.hero-box {
+  max-width: 900px;
+  z-index: 5;
+  animation: fadeInUp 1.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-box h2 {
+  font-size: 5.5rem;
+  color: var(--ghostly-white);
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  text-shadow: 0 0 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 140, 0, 0.2);
+}
+
+.hero-box p {
+  color: var(--halloween-primary);
+  font-size: 1.2rem;
+  letter-spacing: 7px;
+  font-weight: 700;
+  margin-bottom: 3.5rem;
+  text-transform: uppercase;
+  animation: letterSpacing 2s ease-out;
+}
+
+@keyframes letterSpacing {
+  from {
+    letter-spacing: 0px;
+    opacity: 0;
+  }
+
+  to {
+    letter-spacing: 7px;
+    opacity: 1;
+  }
+}
+
+.btn-haunted {
+  padding: 1.3rem 4rem;
+  background: transparent;
+  color: var(--halloween-primary);
+  border: 2px solid var(--halloween-primary);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: var(--transition-haunted);
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-haunted:hover {
+  background: var(--halloween-primary);
+  color: var(--pure-black);
+  box-shadow: 0 0 45px rgba(255, 140, 0, 0.5);
+  transform: translateY(-8px);
+}
+

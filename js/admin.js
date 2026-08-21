@@ -9,6 +9,7 @@
   var DEFAULT_PASSWORD = 'ANAISABEL2026';
   var DEFAULT_USERNAME = 'Ana Avila';
   var SESSION_KEY = 'bodegon_admin_session';
+  var AUTOSAVE_KEY = 'bodegon_autosave';
 
   var content = {
     version: 1,
@@ -19,7 +20,8 @@
     addCards: [],
     addTexts: [],
     deleteCards: [],
-    deleteTexts: []
+    deleteTexts: [],
+    seasonCovers: {}
   };
 
   var authed = false;
@@ -30,6 +32,28 @@
   var CONTACT_PHONE = '3107706615';
 
   /* ---------- utilidades ---------- */
+
+  function compressImage(dataUrl, maxWidth, quality) {
+    return new Promise(function (resolve) {
+      var img = new Image();
+      img.onload = function () {
+        var w = img.width;
+        var h = img.height;
+        if (w > maxWidth) {
+          h = Math.round(h * maxWidth / w);
+          w = maxWidth;
+        }
+        var canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = function () { resolve(dataUrl); };
+      img.src = dataUrl;
+    });
+  }
 
   function hash(s) {
     var h = 5381;
@@ -171,7 +195,8 @@
     box.querySelector('[data-role="del"]').addEventListener('click', function () {
       closeModal(box);
       deleteEl(el);
-      toast('Elemento quitado. Recuerda guardar.');
+      autoSave();
+      toast('Elemento quitado.');
     });
     box.querySelector('[data-role="ok"]').addEventListener('click', function () {
       var val = box.querySelector('[data-role="value"]').value;
@@ -185,7 +210,8 @@
         saveTextPatch(el, useHtml ? val : esc(val));
       }
       closeModal(box);
-      toast('Texto actualizado. Recuerda guardar.');
+      autoSave();
+      toast('Texto actualizado.');
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -243,18 +269,26 @@
     box.querySelector('[data-role="ok"]').addEventListener('click', function () {
       var src = pendingData || urlInp.value.trim();
       if (!src) { toast('Elige una imagen o pega una URL.'); return; }
-      img.src = src;
-      if (entry) {
-        entry.img = src;
-      } else {
-        var path = cssPath(img);
-        for (var i = 0; i < content.images.length; i++) {
-          if (content.images[i].sel === path) { content.images[i].src = src; return closeModal(box); }
+      function applyImage(finalSrc) {
+        img.src = finalSrc;
+        if (entry) {
+          entry.img = finalSrc;
+        } else {
+          var path = cssPath(img);
+          for (var i = 0; i < content.images.length; i++) {
+            if (content.images[i].sel === path) { content.images[i].src = finalSrc; closeModal(box); autoSave(); toast('Foto actualizada.'); return; }
+          }
+          content.images.push({ sel: path, src: finalSrc });
         }
-        content.images.push({ sel: path, src: src });
+        closeModal(box);
+        autoSave();
+        toast('Foto actualizada.');
       }
-      closeModal(box);
-      toast('Foto actualizada. Recuerda guardar.');
+      if (src.indexOf('data:') === 0) {
+        compressImage(src, 1000, 0.55).then(applyImage);
+      } else {
+        applyImage(src);
+      }
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -340,6 +374,8 @@
       e.preventDefault();
       if (window.confirm('¿Quitar este elemento?')) {
         deleteEl(b.closest('.admin-delbtn-host') || b.parentElement);
+        autoSave();
+        toast('Elemento quitado.');
       }
     });
     return b;
@@ -386,6 +422,47 @@
     });
   }
 
+  function wireSeasonPhotoButtons() {
+    qa('.admin-season-photo-btn').forEach(function (btn) {
+      if (btn.dataset.adminWired) return;
+      btn.dataset.adminWired = '1';
+      btn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var month = btn.dataset.seasonPhoto;
+        var landing;
+        if (month === 'hero') {
+          landing = document.getElementById('inicio');
+        } else {
+          landing = document.querySelector('.halloween-landing[data-landing="' + month + '"]') ||
+                    document.getElementById('halloween-landing');
+        }
+        if (!landing) { toast('No se encontró la portada.'); return; }
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.addEventListener('change', function () {
+          var f = input.files[0];
+          if (!f) return;
+          var rd = new FileReader();
+          rd.onload = function () {
+            compressImage(rd.result, 1000, 0.55).then(function (compressed) {
+              landing.classList.add('has-cover-photo');
+              landing.style.backgroundImage = 'url(' + compressed + ')';
+              landing.style.backgroundSize = 'cover';
+              landing.style.backgroundPosition = 'center';
+              content.seasonCovers[month] = compressed;
+              autoSave();
+              toast('Portada de ' + month + ' actualizada.');
+            });
+          };
+          rd.readAsDataURL(f);
+        });
+        input.click();
+      });
+    });
+  }
+
   function publishCard(host) {
     var grid = host.classList.contains('grid-haunted') ? host : null;
     var section = grid ? host.closest('.season-catalog') : host;
@@ -420,11 +497,20 @@
       var desc = box.querySelector('[data-role="desc"]').value.trim();
       if (!src || !title) { toast('La foto y el título son obligatorios.'); return; }
 
-      var entry = { id: uid(), _type: 'card', container: cssPath(grid || section), img: src, title: title, desc: desc };
-      content.addCards.push(entry);
-      insertCard(entry);
-      closeModal(box);
-      toast('Tarjeta publicada. Recuerda guardar.');
+      function saveCard(imgSrc) {
+        var entry = { id: uid(), _type: 'card', container: cssPath(grid || section), img: imgSrc, title: title, desc: desc };
+        content.addCards.push(entry);
+        insertCard(entry);
+        closeModal(box);
+        autoSave();
+        toast('Tarjeta publicada.');
+      }
+
+      if (src.indexOf('data:') === 0) {
+        compressImage(src, 1000, 0.55).then(saveCard);
+      } else {
+        saveCard(src);
+      }
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -474,7 +560,8 @@
       content.addTexts.push(entry);
       insertText(entry);
       closeModal(box);
-      toast('Párrafo publicado. Recuerda guardar.');
+      autoSave();
+      toast('Párrafo publicado.');
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -534,7 +621,8 @@
   function openModal(html) {
     closeModal();
     var overlay = document.createElement('div');
-    overlay.className = 'admin-ui admin-modal';
+    overlay.className = 'admin-modal';
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:1100;display:flex;align-items:center;justify-content:center;padding:1rem;background:rgba(10,5,18,0.75);';
     overlay.innerHTML = '<div class="admin-modal-box">' + html + '</div>';
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) closeModal();
@@ -581,6 +669,25 @@
     });
   }
 
+  function applySeasonCovers() {
+    Object.keys(content.seasonCovers).forEach(function (month) {
+      var src = content.seasonCovers[month];
+      if (!src) return;
+      var landing;
+      if (month === 'hero') {
+        landing = document.getElementById('inicio');
+      } else {
+        landing = document.querySelector('.halloween-landing[data-landing="' + month + '"]') ||
+                  document.getElementById('halloween-landing');
+      }
+      if (!landing) return;
+      landing.classList.add('has-cover-photo');
+      landing.style.backgroundImage = 'url(' + src + ')';
+      landing.style.backgroundSize = 'cover';
+      landing.style.backgroundPosition = 'center';
+    });
+  }
+
   /* ---------- wire de elementos dinámicos ---------- */
 
   function wireCard(card, entry) {
@@ -624,12 +731,29 @@
     fab.innerHTML = '&#128274;';
     fab.addEventListener('click', function () {
       if (!authed) { openLogin(); return; }
-      authed = false;
-      try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
-      disableEditMode();
-      openLogin();
+      if (window.confirm('¿Cerrar sesión de administrador?')) {
+        authed = false;
+        try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+        disableEditMode();
+        updateFabState();
+        toast('Sesión cerrada.');
+      }
     });
     document.body.appendChild(fab);
+  }
+
+  function updateFabState() {
+    var fab = document.querySelector('.admin-fab');
+    if (!fab) return;
+    if (authed) {
+      fab.classList.add('is-logged-in');
+      fab.title = 'Sesión activa — clic para cerrar sesión';
+      fab.innerHTML = '&#128100;';
+    } else {
+      fab.classList.remove('is-logged-in');
+      fab.title = 'Iniciar sesión como administrador';
+      fab.innerHTML = '&#128274;';
+    }
   }
 
   function openLogin() {
@@ -714,6 +838,7 @@
         clearInterval(timer);
         closeModal();
         enableEditMode();
+        updateFabState();
         toast('Bienvenido, administrador.');
       } else {
         loginAttempts++;
@@ -735,10 +860,12 @@
     document.body.classList.add('admin-edit-mode');
     ensureToolbar();
     ensureLogoutFab();
+    ensureSaveFab();
     ensureAddButtons();
     ensureDelButtons();
     ensurePhotoButtons();
     wireStatic();
+    wireSeasonPhotoButtons();
   }
 
   function disableEditMode() {
@@ -748,6 +875,8 @@
     if (tb) tb.remove();
     var lo = document.querySelector('.admin-logout-fab');
     if (lo) lo.remove();
+    var sf = document.querySelector('.admin-save-fab');
+    if (sf) sf.remove();
     qa('.admin-addbtn').forEach(function (b) { b.remove(); });
     qa('.admin-delbtn').forEach(function (b) { b.remove(); });
     qa('.admin-seasbtn').forEach(function (b) { b.remove(); });
@@ -764,7 +893,18 @@
       '<button type="button" class="admin-btn" data-role="password">Cambiar contraseña</button>';
     document.body.appendChild(tb);
 
-    tb.querySelector('[data-role="save"]').addEventListener('click', saveToDisk);
+    var saveBtn = tb.querySelector('[data-role="save"]');
+    var saveTimer = setInterval(function () {
+      if (!tb.isConnected) { clearInterval(saveTimer); return; }
+      var activePanel = document.querySelector('.season-panel.is-active');
+      var isEnero = activePanel && activePanel.dataset && activePanel.dataset.panel === 'enero';
+      saveBtn.style.display = isEnero ? '' : 'none';
+    }, 800);
+
+    saveBtn.addEventListener('click', function () {
+      autoSave();
+      toast('Guardado en el navegador.');
+    });
     tb.querySelector('[data-role="password"]').addEventListener('click', changePassword);
   }
 
@@ -779,7 +919,22 @@
       authed = false;
       try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
       disableEditMode();
+      updateFabState();
       toast('Sesión cerrada.');
+    });
+    document.body.appendChild(b);
+  }
+
+  function ensureSaveFab() {
+    if (document.querySelector('.admin-save-fab')) return;
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'admin-ui admin-save-fab';
+    b.title = 'Guardar cambios';
+    b.innerHTML = '&#128190;';
+    b.addEventListener('click', function () {
+      autoSave();
+      toast('Guardado en el navegador.');
     });
     document.body.appendChild(b);
   }
@@ -842,13 +997,42 @@
 
   /* ---------- guardar / cargar ---------- */
 
+  /* ---------- auto-save en localStorage ---------- */
+
+  function autoSave() {
+    try {
+      var data = serialize();
+      localStorage.setItem(AUTOSAVE_KEY, data);
+    } catch (e) {
+      toast('⚠️ No se pudo guardar. El almacenamiento está lleno. Intenta con fotos más pequeñas.');
+    }
+  }
+
+  function loadAutoSave() {
+    try {
+      var raw = localStorage.getItem(AUTOSAVE_KEY);
+      if (!raw) return null;
+      return parseWrapped(raw);
+    } catch (e) { return null; }
+  }
+
+  function dedup(arr, key) {
+    var seen = {};
+    return arr.filter(function (item) {
+      var k = typeof key === 'function' ? key(item) : item[key];
+      if (seen[k]) return false;
+      seen[k] = true;
+      return true;
+    });
+  }
+
   function serialize() {
     var out = {
       version: 1,
       usernameHash: content.usernameHash || null,
       passwordHash: content.passwordHash || null,
-      texts: content.texts,
-      images: content.images,
+      texts: dedup(content.texts, 'sel'),
+      images: dedup(content.images, 'sel'),
       addCards: content.addCards.map(function (c) {
         return { id: c.id, container: c.container, img: c.img, title: c.title, desc: c.desc };
       }),
@@ -856,7 +1040,8 @@
         return { id: t.id, container: t.container, html: t.html };
       }),
       deleteCards: content.deleteCards,
-      deleteTexts: content.deleteTexts
+      deleteTexts: content.deleteTexts,
+      seasonCovers: content.seasonCovers || {}
     };
     return JSON.stringify(out, null, 2);
   }
@@ -928,7 +1113,9 @@
     content.deleteTexts = obj.deleteTexts || [];
     if (obj.passwordHash) content.passwordHash = obj.passwordHash;
     if (obj.usernameHash) content.usernameHash = obj.usernameHash;
+    content.seasonCovers = obj.seasonCovers || {};
     applyContent();
+    applySeasonCovers();
   }
 
   function changePassword() {
@@ -958,7 +1145,8 @@
       content.usernameHash = hash(nu);
       content.passwordHash = hash(nw);
       closeModal();
-      toast('Acceso actualizado. Guarda los cambios.');
+      autoSave();
+      toast('Acceso actualizado.');
     });
     box.querySelector('[data-role="cancel"]').addEventListener('click', function () { closeModal(box); });
   }
@@ -968,27 +1156,76 @@
     else enableEditMode();
   }
 
+  /* ---------- recomprimir fotos viejas grandes ---------- */
+
+  function isBigBase64(s) {
+    return s && s.indexOf('data:image') === 0 && s.length > 150000;
+  }
+
+  function reCompressOld() {
+    var changed = false;
+    Object.keys(content.seasonCovers || {}).forEach(function (k) {
+      var v = content.seasonCovers[k];
+      if (isBigBase64(v)) {
+        compressImage(v, 1000, 0.55).then(function (c) {
+          content.seasonCovers[k] = c;
+          autoSave();
+        });
+        changed = true;
+      }
+    });
+    content.images.forEach(function (im) {
+      if (isBigBase64(im.src)) {
+        compressImage(im.src, 1000, 0.55).then(function (c) {
+          im.src = c;
+          autoSave();
+        });
+        changed = true;
+      }
+    });
+    content.addCards.forEach(function (c) {
+      if (isBigBase64(c.img)) {
+        compressImage(c.img, 1000, 0.55).then(function (cc) {
+          c.img = cc;
+          autoSave();
+        });
+        changed = true;
+      }
+    });
+    if (changed) toast('Fotos antiguas comprimidas para liberar espacio.');
+  }
+
   /* ---------- iniciar ---------- */
 
   function init() {
+    var base = null;
     if (window.ADMIN_CONTENT) {
       try {
-        applyData(window.ADMIN_CONTENT);
-      } catch (e) {
-        /* archivo inválido: seguimos con el contenido por defecto */
-      }
+        base = JSON.parse(JSON.stringify(window.ADMIN_CONTENT));
+      } catch (e) {}
+    }
+    var saved = loadAutoSave();
+    if (saved) {
+      try {
+        base = mergeData(base || {}, saved);
+      } catch (e) {}
+    }
+    if (base) {
+      try { applyData(base); } catch (e) {}
     }
     buildFab();
+    reCompressOld();
+
+    setTimeout(applySeasonCovers, 150);
 
     try {
       if (localStorage.getItem(SESSION_KEY)) {
         authed = true;
         enableEditMode();
+        updateFabState();
       }
     } catch (e) {}
 
-    /* en modo edición: cualquier foto abre el editor (bloquea el lightbox y
-       funciona igual en PC y celular con el selector de archivos) */
     document.addEventListener('click', function (e) {
       var img = e.target.closest ? e.target.closest('img') : null;
       if (!img || !editMode) return;
@@ -997,6 +1234,20 @@
       e.preventDefault();
       editImage(img);
     }, true);
+  }
+
+  function mergeData(base, override) {
+    var result = JSON.parse(JSON.stringify(base));
+    if (override.texts !== undefined) result.texts = override.texts;
+    if (override.images !== undefined) result.images = override.images;
+    if (override.addCards !== undefined) result.addCards = override.addCards;
+    if (override.addTexts !== undefined) result.addTexts = override.addTexts;
+    if (override.deleteCards !== undefined) result.deleteCards = override.deleteCards;
+    if (override.deleteTexts !== undefined) result.deleteTexts = override.deleteTexts;
+    if (override.seasonCovers !== undefined) result.seasonCovers = override.seasonCovers;
+    if (override.passwordHash) result.passwordHash = override.passwordHash;
+    if (override.usernameHash) result.usernameHash = override.usernameHash;
+    return result;
   }
 
   if (document.readyState === 'loading') {
